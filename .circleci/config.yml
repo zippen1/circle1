@@ -7,5 +7,28 @@ jobs:
       only:
         - master
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "32:42:b0:9e:c5:ca:b2:05:2c:80:8e:c4:13:73:b4:9d"
+      - checkout
+      - restore_cache:
+          keys:
+            - dependencies_zippen
       - run:
-          name: echo "hello"
+          name: Install
+          command: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependencies_zippen
+      - run:
+          name: Build
+          command: yarn build
+      - run:
+          name: Prepare shell commands
+          # shell chmod +x 赋予执行权限
+          # 执行shell脚本
+          command: chmod +x scripts/deploy.sh
+      - run:
+          name: Run Deploy to Github pages
+          command: ./scripts/deploy.sh
