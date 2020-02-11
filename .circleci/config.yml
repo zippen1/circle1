@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:12
+    branches:
+      only:
+        - master
+    steps:
+      - run:
+          name: echo "hello"
